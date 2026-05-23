@@ -1,49 +1,38 @@
-# Расписание
+# Расписание ФА (furshed)
 
-- запускаться на эмуляторе android или linux (под windows через прокси)
-- Приложение должно выводить на экран список преподавателей или групп (список)
-- По ссылке на преподавателя или группу открывать расписание занятий (календарь)
-- Формировать расписание из нескольких преподавателей
-- Данные загружать по api с ruz.fa.ru
+Законченное приложение «Расписание» для ruz.fa.ru.
 
-## Roadmap
+## Использованные этапы курса
 
-Чтобы приступить к этому уроку, нужно предварительно изучить по очереди:
+| Этап | Реализация в проекте |
+|------|---------------------|
+| statefull | `ScheduleScreen`, переключение список/календарь |
+| flutter_calendar_view / time_scheduler_table | `ScheduleCalendarView` |
+| provider | `ScheduleSettings` — выбор сущности и диапазон дат |
+| news_list | `LessonCard` — карточки занятий |
+| netbloc / flbloc | `ScheduleBloc` — загрузка расписания |
+| searchable_list | `DebouncedSearchBar`, модуль `searchable_list/searcheable_list` |
+| go_router | `lib/router/app_router.dart` |
 
+## Запуск (Windows)
 
+```bash
+cd 2.flutter/furshed
+flutter pub get
+flutter run -d windows
+```
 
-- 2.flutter/statefull/statefull
-- 2.flutter/flutter_calendar_view
-- 2.flutter/provider
-- 2.flutter/news_list
-- 2.flutter/netbloc/netbloc
-- 2.flutter/time_scheduler_table
-- 2.flutter/flbloc/flbloc
-- 2.flutter/go_router_example
+## Прокси (Web / Chrome / CORS)
 
+```bash
+dart run first/flutter_application_1/server.dart
+cd furshed
+flutter run -d chrome --dart-define=USE_PROXY=true
+```
 
-# Методичка
-В данном примере используется два виджета
+## Функции
 
-Код запускался, поэтому сделайте 
-
-  flutter clean
-
-чтобы очистить сборочные файлы
-
-
- Список преподавателей
-- lib/examples/prepods_list.dart
-- календарь - lib/examples/sheduling_calendar.dart
-
-Список групп
-- lib/examples/group_list.dart
-- lib/examples/group_list_body.dart
-
-Обратите внимание, что вместо навигации используется роут
-
-Потренируйтесь с роутами - 2.flutter/go_router_example
-
-Удачи!
-
-builds: https://github.com/VladimirAndropov/fa-cross-practice/releases
+- Поиск преподавателя или группы (debounced)
+- Переход к расписанию по `go_router`
+- Список занятий или недельная сетка
+- Сдвиг периода ±14 дней
