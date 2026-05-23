@@ -60,8 +60,10 @@ class HomeScreen extends StatelessWidget {
                     api.search(term: query, isPerson: settings.isPerson),
                 onResultSelected: (result) {
                   if (!context.mounted) return;
+                  final scheduleType =
+                      settings.isPerson ? 'person' : 'group';
                   context.push(
-                    '/schedule/${result.scheduleType}/${result.id}',
+                    '/schedule/$scheduleType/${result.id}',
                     extra: result.label,
                   );
                 },

@@ -4,7 +4,8 @@ import 'package:furshed/models/ruz_search_result.dart';
 /// Provider: передача выбранной сущности и диапазона дат между экранами.
 class ScheduleSettings extends ChangeNotifier {
   RuzSearchResult? selected;
-  bool isPerson = true;
+  /// false = группа (как в оригинальном prepods_list: status по умолчанию).
+  bool isPerson = false;
   int dayStartOffset = 0;
   int dayEndOffset = 7;
   bool showCalendar = false;
