@@ -1,18 +1,19 @@
 # Расписание ФА (furshed)
 
-Законченное приложение «Расписание» для ruz.fa.ru.
+Законченное приложение для [ruz.fa.ru](https://ruz.fa.ru).
 
-## Использованные этапы курса
+## Этапы курса в проекте
 
-| Этап | Реализация в проекте |
-|------|---------------------|
-| statefull | `ScheduleScreen`, переключение список/календарь |
-| flutter_calendar_view / time_scheduler_table | `ScheduleCalendarView` |
-| provider | `ScheduleSettings` — выбор сущности и диапазон дат |
+| Этап | Реализация |
+|------|------------|
+| statefull | `ScheduleScreen` — переключение список / сетка |
+| flutter_calendar_view | отдельный модуль `../flutter_calendar_view/example` |
+| provider | `ScheduleSettings` в `lib/providers/` |
 | news_list | `LessonCard` — карточки занятий |
 | netbloc / flbloc | `ScheduleBloc` — загрузка расписания |
-| searchable_list | `DebouncedSearchBar`, модуль `searchable_list/searcheable_list` |
-| go_router | `lib/router/app_router.dart` |
+| time_scheduler_table | `ScheduleCalendarView` |
+| searchable_list | `DebouncedSearchBar`, модуль `../searchable_list/searcheable_list` |
+| go_router | `lib/router/app_router.dart`, `AppShell` |
 
 ## Запуск (Windows)
 
@@ -26,13 +27,14 @@ flutter run -d windows
 
 ```bash
 dart run first/flutter_application_1/server.dart
-cd furshed
+cd 2.flutter/furshed
 flutter run -d chrome --dart-define=USE_PROXY=true
 ```
 
 ## Функции
 
-- Поиск преподавателя или группы (debounced)
-- Переход к расписанию по `go_router`
+- Поиск преподавателя или группы (debounce 500 ms)
+- Переход к расписанию: `go_router` → `/schedule/:type/:id`
 - Список занятий или недельная сетка
 - Сдвиг периода ±14 дней
+- Вкладка «Прокси» — демо через localhost

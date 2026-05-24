@@ -3,7 +3,7 @@ import 'package:furshed/models/lesson.dart';
 import 'package:intl/intl.dart';
 import 'package:time_scheduler_table/time_scheduler_table.dart';
 
-/// Недельная сетка (time_scheduler_table + flutter_calendar_view).
+/// Недельная сетка занятий (time_scheduler_table).
 class ScheduleCalendarView extends StatelessWidget {
   const ScheduleCalendarView({
     super.key,
@@ -26,7 +26,7 @@ class ScheduleCalendarView extends StatelessWidget {
   ];
 
   List<String> get _columnLabels {
-  final labels = <String>[];
+    final labels = <String>[];
     for (var i = 0; i < 7; i++) {
       final day = weekStart.add(Duration(days: i));
       labels.add(DateFormat('E dd.MM', 'ru').format(day));
@@ -34,29 +34,55 @@ class ScheduleCalendarView extends StatelessWidget {
     return labels;
   }
 
+  DateTime _dateOnly(DateTime value) =>
+      DateTime(value.year, value.month, value.day);
+
   List<Event> _toEvents() {
-    return lessons.map((lesson) {
-      final json = {
-        'discipline': lesson.discipline,
-        'group': lesson.group,
-        'date': lesson.date,
-        'beginLesson': lesson.beginLesson,
-      };
-      return Event.fromJson(json);
-    }).toList();
+    final gridStart = _dateOnly(weekStart);
+    final events = <Event>[];
+
+    for (final lesson in lessons) {
+      if (lesson.date.isEmpty || lesson.beginLesson.isEmpty) continue;
+
+      try {
+        final lessonDate = _dateOnly(Event.parseScheduleDate(lesson.date));
+        final columnIndex = lessonDate.difference(gridStart).inDays;
+        if (columnIndex < 0 || columnIndex > 6) continue;
+
+        final begin = DateFormat('H:mm').parse(lesson.beginLesson);
+        final rowIndex =
+            (((begin.hour * 60 + begin.minute) / 96).toInt() - 5).clamp(0, 7);
+
+        events.add(
+          Event(
+            title: lesson.discipline,
+            time: lesson.group,
+            columnIndex: columnIndex,
+            rowIndex: rowIndex,
+          ),
+        );
+      } catch (_) {
+        // Пропускаем занятия с некорректной датой/временем.
+      }
+    }
+
+    return events;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (lessons.isEmpty) {
-      return const Center(child: Text('Занятий в выбранном периоде нет'));
+    final events = _toEvents();
+    if (events.isEmpty) {
+      return const Center(
+        child: Text('Занятий в выбранном периоде нет'),
+      );
     }
     return TimeSchedulerTable(
-      eventList: _toEvents(),
+      eventList: events,
       cellHeight: 52,
       cellWidth: 64,
       currentColumnTitleIndex:
-          DateTime.now().difference(weekStart).inDays.clamp(0, 6),
+          DateTime.now().difference(_dateOnly(weekStart)).inDays.clamp(0, 6),
       columnLabels: _columnLabels,
       rowLabels: _rowLabels,
       eventAlert: EventAlert(),

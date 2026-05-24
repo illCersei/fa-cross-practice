@@ -125,7 +125,9 @@ class _DebouncedSearchBarState<T> extends State<DebouncedSearchBar<T>> {
                         },
                       )
                     : null,
-            border: const OutlineInputBorder(),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
           onChanged: _onQueryChanged,
           onSubmitted: (_) => _focusNode.unfocus(),
