@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:furshed/app_theme.dart';
 import 'package:furshed/config/ruz_api_config.dart';
 import 'package:furshed/models/ruz_search_result.dart';
 import 'package:furshed/providers/schedule_settings.dart';
 import 'package:furshed/services/ruz_api.dart';
 import 'package:furshed/widgets/debounced_search_bar.dart';
+import 'package:furshed/widgets/search_type_toggle.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -23,27 +23,17 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Расписание ФА'),
         flexibleSpace: Container(decoration: AppTheme.appBarDecoration()),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: FlutterSwitch(
-              activeText: 'Лектор',
-              inactiveText: 'Группа',
-              inactiveColor: const Color(0xFF2E7D32),
-              activeColor: const Color(0xFF66BB6A),
-              value: settings.isPerson,
-              width: 130,
-              height: 30,
-              onToggle: settings.setSearchType,
-            ),
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            SearchTypeToggle(
+              isPerson: settings.isPerson,
+              onChanged: settings.setSearchType,
+            ),
+            const SizedBox(height: 12),
             Expanded(
               child: Card(
                 child: Padding(

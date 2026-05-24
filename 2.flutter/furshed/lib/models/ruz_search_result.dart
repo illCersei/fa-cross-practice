@@ -13,10 +13,10 @@ class RuzSearchResult {
 
   factory RuzSearchResult.fromJson(Map<String, dynamic> json) {
     return RuzSearchResult(
-      id: (json['id'] as String?) ?? '',
-      label: (json['label'] as String?) ?? '',
-      description: (json['description'] as String?) ?? '',
-      type: (json['type'] as String?) ?? '',
+      id: json['id']?.toString() ?? '',
+      label: json['label']?.toString() ?? '',
+      description: json['description']?.toString() ?? '',
+      type: json['type']?.toString() ?? '',
     );
   }
 
